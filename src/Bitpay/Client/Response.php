@@ -72,9 +72,16 @@ class Response implements ResponseInterface
         for ($i = 0; $i < $linesLen; $i++) {
             if (0 == $i) {
                 preg_match('/^HTTP\/(\d)\s(\d+)\s(.*)/', $lines[$i], $statusLine);
+                if(count($statusLine) >= 3)
+                {
+                    $response->setStatusCode($statusCode = $statusLine[2]);
+                }
+                else
+                {
+                    preg_match('/^HTTP\/(\d\.\d)\s(\d+)\s(.+)/', $lines[$i], $statusLine);
+                    $response->setStatusCode($statusCode = $statusLine[2]);
+                }
     
-                $response->setStatusCode($statusCode = $statusLine[2]);
-
                 continue;
             }
 
